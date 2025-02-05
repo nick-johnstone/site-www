@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NeedToKnow Tech</title>
+  <style>
+    /* Basic Reset & Global Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: url("images/main.jpg") no-repeat center center/cover;
+      height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #ffffff;
+      position: relative;
+    }
+    .hero-overlay {
+      background: rgba(0, 0, 0, 0.5);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Services Section */
+    .services {
+      background: #ffffff;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .services h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #003366; /* Dark blue tone */
+    }
+    .services p {
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: #555555;
+    }
+    .service-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .service-list li {
+      list-style: none;
+      background-color: #f0f4f8;
+      border: 1px solid #d9e0e7;
+      border-radius: 8px;
+      padding: 20px;
+      min-width: 200px;
+      flex: 1 1 200px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Contact Section */
+    .contact {
+      background: url("images/contact.jpg") no-repeat center center/cover;
+      color: #ffffff;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+    }
+    .contact-overlay {
+      background: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .contact-content {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .contact h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .contact p {
+      margin-bottom: 1rem;
+    }
+    .contact a {
+      color: #ffdd57; /* A contrasting highlight color */
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .contact a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: #e2e3e5;
+      text-align: center;
+      padding: 10px 20px;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Media Queries */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .service-list {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>NeedToKnow Tech</h1>
+      <p>Project planning and delivery in Cyber Security, Identity, Automation, and AI spaces.<br>
+        Focused on Microsoft, CyberArk, and SailPoint.</p>
+    </div>
+  </header>
+
+  <!-- Services Section -->
+  <section class="services">
+    <h2>Our Services</h2>
+    <p>We provide expert guidance and hands-on support to ensure your business succeeds in the following areas:</p>
+    <ul class="service-list">
+      <li>Cyber Security</li>
+      <li>Identity & Access Management</li>
+      <li>Automation</li>
+      <li>AI Integration</li>
+      <li>Microsoft Solutions</li>
+      <li>CyberArk Solutions</li>
+      <li>SailPoint Solutions</li>
+    </ul>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact">
+    <div class="contact-overlay"></div>
+    <div class="contact-content">
+      <h2>Get in Touch</h2>
+      <p>Have questions or need more info about our services?</p>
+      <p>Email us at 
+        <a href="mailto:nick@needtoknowtech.com.au">nick@needtoknowtech.com.au</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; <span id="year"></span> NeedToKnow Tech. All rights reserved.
+  </footer>
+
+  <script>
+    // Auto-update footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
