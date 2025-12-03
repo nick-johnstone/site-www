@@ -41,8 +41,6 @@ main{padding:30px 20px}
 .hero p{color:var(--muted);max-width:760px}
 .hero .meta{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;font-size:.95rem;color:var(--muted-2)}
 
-.hint{color:var(--muted-2);font-size:.95rem}
-
 .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 8px}
 .section-title h2{font-size:1.3rem}
 .section-title .hint{color:var(--muted-2);font-size:.95rem}

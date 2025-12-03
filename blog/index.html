@@ -41,7 +41,6 @@
       <h2>Latest articles</h2>
       <p class="hint">Click any card to open the full guide and download its resources.</p>
     </div>
-    <div id="status" class="hint" role="status" aria-live="polite">Loading articles…</div>
     <div id="posts" class="posts-grid" role="list"></div>
     <div id="empty" class="empty" style="display:none">No posts yet. Add entries to <code>blog/posts.json</code> to publish.</div>
 
@@ -71,29 +70,17 @@
   <script>
     const postsEl = document.getElementById('posts');
     const emptyEl = document.getElementById('empty');
-    const statusEl = document.getElementById('status');
 
-    async function loadPosts() {
-      try {
-        const res = await fetch('posts.json');
-        const posts = await res.json();
-
-        const validPosts = Array.isArray(posts)
-          ? posts.filter((post) => post.title && post.slug && post.date)
-          : [];
-
-        if (validPosts.length === 0) {
-          statusEl.style.display = 'none';
+    fetch('posts.json')
+      .then((res) => res.json())
+      .then((posts) => {
+        if(!posts || posts.length === 0){
           emptyEl.style.display = 'block';
           return;
         }
 
-        statusEl.textContent = `Showing ${validPosts.length} article${validPosts.length === 1 ? '' : 's'} (newest first)`;
-
-        const fragment = document.createDocumentFragment();
-
-        validPosts
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
+        posts
+          .sort((a,b)=> new Date(b.date) - new Date(a.date))
           .forEach((post) => {
             const article = document.createElement('article');
             article.className = 'card';
@@ -102,7 +89,7 @@
             const hero = document.createElement('div');
             hero.className = 'thumb';
             hero.style.backgroundImage = `url(${post.hero || 'assets/aurora-1.svg'})`;
-            hero.setAttribute('aria-hidden', 'true');
+            hero.setAttribute('aria-hidden','true');
 
             const body = document.createElement('div');
             body.className = 'body';
@@ -112,11 +99,7 @@
 
             const meta = document.createElement('div');
             meta.className = 'meta';
-            const date = new Date(post.date).toLocaleDateString(undefined, {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric'
-            });
+            const date = new Date(post.date).toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
             meta.textContent = `${date} • ${post.readingTime || '5 min read'}`;
 
             const summary = document.createElement('p');
@@ -125,7 +108,7 @@
 
             const tags = document.createElement('div');
             tags.className = 'tags';
-            (post.tags || []).forEach((t) => {
+            (post.tags || []).forEach((t)=>{
               const chip = document.createElement('span');
               chip.className = 'tag';
               chip.textContent = t;
@@ -141,18 +124,11 @@
 
             body.append(title, meta, summary, tags);
             article.append(hero, body, link);
-            fragment.appendChild(article);
+            postsEl.appendChild(article);
           });
+      })
+      .catch(()=> emptyEl.style.display = 'block');
 
-        postsEl.appendChild(fragment);
-      } catch (err) {
-        statusEl.style.display = 'none';
-        emptyEl.style.display = 'block';
-        console.error('Unable to load posts', err);
-      }
-    }
-
-    loadPosts();
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
