@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Deploy private AI at the edge with confidence",
+    "slug": "private-ai-edge-starter",
+    "summary": "A checklist-driven guide for bringing LLMs and vision models on-prem without handing prompts or outputs to third parties.",
+    "date": "2024-06-11",
+    "readingTime": "7 min read",
+    "hero": "assets/aurora-1.svg",
+    "tags": ["Private AI", "Edge", "Security"]
+  },
+  {
+    "title": "Agent playbooks that your ops team can trust",
+    "slug": "agent-playbooks",
+    "summary": "Design opinionated automations with guardrails, approvals, and reproducible runs while keeping credentials in your control.",
+    "date": "2024-05-28",
+    "readingTime": "6 min read",
+    "hero": "assets/aurora-2.svg",
+    "tags": ["Agents", "Automation", "Playbooks"]
+  }
+]
