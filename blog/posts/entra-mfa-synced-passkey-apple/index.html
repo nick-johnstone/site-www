@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Synced Passkey for iOS/MacOS</title>
+  <meta name="description" content="Create an Entra passkey that rides iCloud Keychain so Safari and native apps can prompt Face ID or Touch ID for MFA." />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+  <div class="wrap article">
+    <header>
+      <div class="eyebrow">Guide</div>
+      <h1>Setup Synced Passkey for iOS/MacOS</h1>
+      <div class="byline">Published Jul 20, 2024 • 5 min read • <a href="../..">Back to all posts</a></div>
+    </header>
+
+    <img src="../../assets/aurora-1.svg" alt="Cyan aurora gradient banner" class="hero" />
+
+    <p>Passkeys let users satisfy Entra MFA with Face ID or Touch ID instead of OTP codes. This scaffold shows where to place device screenshots and tenant-specific copy for enabling synced passkeys through iCloud Keychain.</p>
+
+    <h2>Enable passkeys on Apple devices</h2>
+    <ol>
+      <li>Confirm <strong>iCloud Keychain</strong> is on across the target iPhone, iPad, and Mac.</li>
+      <li>On macOS, open <strong>Safari &gt; Settings &gt; Passwords &gt; Passkeys</strong> to verify <em>Allow passkeys</em> is toggled.</li>
+      <li>Ensure each device has a device passcode and biometric configured; Entra will rely on these for local authentication.</li>
+    </ol>
+
+    <h2>Create the Entra passkey</h2>
+    <ol>
+      <li>From <strong>mysignins.microsoft.com &gt; Security info</strong>, choose <strong>Add sign-in method</strong> &gt; <strong>Passkey</strong>.</li>
+      <li>When prompted to pick a device, choose <strong>Use this device</strong> in Safari or the system browser.</li>
+      <li>Approve the WebAuthn prompt with Face ID/Touch ID. Note any branding text you want to capture in screenshots.</li>
+      <li>Sign out and back in to confirm the passkey shows as an available option; document the picker UI in Safari.</li>
+    </ol>
+
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Picker UI</strong>
+        <p>Insert an image of the passkey chooser that appears on login.microsoftonline.com showing the account name and email.</p>
+      </div>
+      <div class="resource">
+        <strong>Keychain view</strong>
+        <p>Show the new passkey entry in <em>Settings &gt; Passwords</em> or <em>System Settings &gt; Passwords</em> for audit trails.</p>
+      </div>
+      <div class="resource">
+        <strong>Policy notes</strong>
+        <p>Add callouts about Conditional Access or FIDO2 policies required for passkeys in your tenant.</p>
+      </div>
+    </div>
+
+    <h2>Recovery and rotation</h2>
+    <ul>
+      <li>Explain how to revoke the passkey from <strong>Security info</strong> if a device is lost, and how to enroll a new one.</li>
+      <li>Recommend keeping at least one hardware security key on the account as a break-glass option.</li>
+      <li>Document behavior when the user signs out of iCloud or disables Keychain—passkeys become unavailable on that device.</li>
+    </ul>
+
+    <div class="video-placeholder">Add a short screen recording of the Safari WebAuthn prompt and Face ID/Touch ID approval.</div>
+  </div>
+</body>
+</html>

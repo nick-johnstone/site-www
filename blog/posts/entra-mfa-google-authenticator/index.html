@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use Google Authenticator for Entra MFA</title>
+  <meta name="description" content="Enroll Google Authenticator with Microsoft Entra, capture backup codes, and keep transfers safe during device swaps." />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+  <div class="wrap article">
+    <header>
+      <div class="eyebrow">Guide</div>
+      <h1>Use Google Authenticator for Entra MFA</h1>
+      <div class="byline">Published Jul 21, 2024 • 6 min read • <a href="../..">Back to all posts</a></div>
+    </header>
+
+    <img src="../../assets/aurora-2.svg" alt="Violet aurora gradient banner" class="hero" />
+
+    <p>Google Authenticator remains a common backup for Entra MFA, especially for users who need codes on Android. This shell outlines the enrollment path, transfer steps, and places where you can paste screenshots and copy specific to your tenant.</p>
+
+    <h2>Enroll the app</h2>
+    <ol>
+      <li>Install <strong>Google Authenticator</strong> from the App Store or Play Store and sign in with a Google account if you want cloud backups enabled.</li>
+      <li>From <strong>mysignins.microsoft.com &gt; Security info</strong>, choose <strong>Add sign-in method</strong> &gt; <strong>Authenticator app</strong> &gt; <strong>I want to use a different authenticator app</strong>.</li>
+      <li>Scan the QR code using the Authenticator app and confirm the six-digit code to finish registration.</li>
+      <li>Repeat on a second device if your policies allow, or note that transfer will require one-time approval later.</li>
+    </ol>
+
+    <div class="callout">
+      <strong>Screenshot slots:</strong> QR scan page, the Authenticator confirmation screen, and the Entra success banner after adding the code.
+    </div>
+
+    <h2>Add resiliency</h2>
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Backup codes</strong>
+        <p>Export or copy the tenant's one-time recovery codes and store them in a vault. Include a redacted example here.</p>
+      </div>
+      <div class="resource">
+        <strong>App transfers</strong>
+        <p>Document the <em>Transfer accounts</em> flow in Google Authenticator (export/import QR) and how to re-verify in Entra.</p>
+      </div>
+      <div class="resource">
+        <strong>Notification hygiene</strong>
+        <p>Recommend disabling screenshot blocking temporarily if you need to capture UI for the guide, then re-enable protections.</p>
+      </div>
+    </div>
+
+    <h2>Validate sign-in experience</h2>
+    <ul>
+      <li>Walk through an Entra login on web and mobile, showing where the six-digit prompt appears and how long codes stay valid.</li>
+      <li>Note any conditional access policies (e.g., number matching, location requirements) that could change the prompt.</li>
+      <li>Capture a short video of the prompt flow and insert it below.</li>
+    </ul>
+
+    <div class="video-placeholder">Embed a quick capture of the Authenticator code entry during an Entra login.</div>
+  </div>
+</body>
+</html>

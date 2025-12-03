@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add a verification code to your iCloud Keychain credential</title>
+  <meta name="description" content="Capture Microsoft Entra MFA codes in iCloud Keychain so Apple devices can approve sign-ins without app hopping." />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+  <div class="wrap article">
+    <header>
+      <div class="eyebrow">Guide</div>
+      <h1>Add a verification code to your iCloud Keychain credential</h1>
+      <div class="byline">Published Jul 22, 2024 • 5 min read • <a href="../..">Back to all posts</a></div>
+    </header>
+
+    <img src="../../assets/aurora-1.svg" alt="Cyan aurora gradient banner" class="hero" />
+
+    <p>When you store a time-based one-time password (TOTP) alongside a saved Microsoft Entra account in iCloud Keychain, Safari and system prompts can autofill the six-digit code without grabbing your phone. Use this shell to document the exact screens for your tenant.</p>
+
+    <div class="callout">
+      <strong>What you need:</strong> An existing Entra password saved to iCloud Keychain, the QR code or secret key for the tenant, and one device with macOS 14+ or iOS 17+ where Keychain autofill is enabled.
+    </div>
+
+    <h2>Steps to capture the TOTP secret</h2>
+    <ol>
+      <li>Open <strong>Settings &gt; Passwords</strong> (iOS/iPadOS) or <strong>System Settings &gt; Passwords</strong> (macOS) and unlock.</li>
+      <li>Search for your <strong>login.microsoftonline.com</strong> or branded Entra entry and open the password record.</li>
+      <li>Choose <strong>Set Up Verification Code</strong> &gt; <strong>Scan QR Code</strong> or <strong>Enter Setup Key</strong>, then capture the MFA secret from the Entra prompt.</li>
+      <li>Confirm a six-digit code appears under the account; wait for one full rotation to verify it refreshes every 30 seconds.</li>
+      <li>Return to the Entra MFA prompt and enter the active code to complete enrollment.</li>
+    </ol>
+
+    <h2>Where to place screenshots and copy</h2>
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Account entry</strong>
+        <p>Add a cropped screenshot of the Keychain detail view with the new <em>Verification Code</em> section expanded.</p>
+      </div>
+      <div class="resource">
+        <strong>Scan vs. manual</strong>
+        <p>Show both the camera capture step and the fallback for manually pasting the setup key if QR scanning is blocked.</p>
+      </div>
+      <div class="resource">
+        <strong>Safari autofill</strong>
+        <p>Demonstrate the inline code prompt during an Entra sign-in flow in Safari to prove the autofill works.</p>
+      </div>
+    </div>
+
+    <h2>Hardening and recovery tips</h2>
+    <ul>
+      <li>Confirm <strong>Keychain Access</strong> on macOS shows iCloud sync is on, and that the verification code appears on at least two devices.</li>
+      <li>Document how to regenerate the TOTP secret from the Entra security info page if the code is lost or rotated.</li>
+      <li>Note that signing out of iCloud removes the code; keep a hardware token or backup authenticator registered as a fallback.</li>
+    </ul>
+
+    <div class="video-placeholder">Drop a short clip of the autofill experience here (Safe to include MP4/WebM or link to Stream).</div>
+  </div>
+</body>
+</html>

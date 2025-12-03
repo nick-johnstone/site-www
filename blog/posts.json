@@ -1,0 +1,56 @@
+[
+  {
+    "title": "Add a verification code to your iCloud Keychain credential",
+    "slug": "entra-mfa-icloud-keychain",
+    "summary": "Store Microsoft Entra one-time codes in iCloud Keychain so Apple devices can approve sign-ins without swapping devices.",
+    "date": "2024-07-22",
+    "readingTime": "5 min read",
+    "hero": "assets/aurora-1.svg",
+    "tags": ["Entra MFA", "iCloud Keychain", "Passkeys"]
+  },
+  {
+    "title": "Use Google Authenticator for Entra MFA",
+    "slug": "entra-mfa-google-authenticator",
+    "summary": "Enroll Google Authenticator with Microsoft Entra, add backup codes, and keep recovery paths ready for device upgrades.",
+    "date": "2024-07-21",
+    "readingTime": "6 min read",
+    "hero": "assets/aurora-2.svg",
+    "tags": ["Entra MFA", "Authenticator", "Recovery"]
+  },
+  {
+    "title": "Setup Synced Passkey for iOS/MacOS",
+    "slug": "entra-mfa-synced-passkey-apple",
+    "summary": "Create a Microsoft Entra passkey that syncs through iCloud so Safari and native apps can use platform authenticator prompts.",
+    "date": "2024-07-20",
+    "readingTime": "5 min read",
+    "hero": "assets/aurora-1.svg",
+    "tags": ["Entra MFA", "Passkeys", "Apple"]
+  },
+  {
+    "title": "Setup Google Chrome Synced Passkey",
+    "slug": "entra-mfa-chrome-passkey",
+    "summary": "Turn on Chrome sync-based passkeys for Microsoft Entra logins with security keys, profile pinning, and recovery tips.",
+    "date": "2024-07-19",
+    "readingTime": "6 min read",
+    "hero": "assets/aurora-2.svg",
+    "tags": ["Entra MFA", "Passkeys", "Chrome"]
+  },
+  {
+    "title": "Deploy private AI at the edge with confidence",
+    "slug": "private-ai-edge-starter",
+    "summary": "A checklist-driven guide for bringing LLMs and vision models on-prem without handing prompts or outputs to third parties.",
+    "date": "2024-06-11",
+    "readingTime": "7 min read",
+    "hero": "assets/aurora-1.svg",
+    "tags": ["Private AI", "Edge", "Security"]
+  },
+  {
+    "title": "Agent playbooks that your ops team can trust",
+    "slug": "agent-playbooks",
+    "summary": "Design opinionated automations with guardrails, approvals, and reproducible runs while keeping credentials in your control.",
+    "date": "2024-05-28",
+    "readingTime": "6 min read",
+    "hero": "assets/aurora-2.svg",
+    "tags": ["Agents", "Automation", "Playbooks"]
+  }
+]

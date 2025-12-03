@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent playbooks that your ops team can trust</title>
+  <meta name="description" content="Operational patterns for building AI agents with approvals, runbooks, and reliable rollout paths." />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+  <div class="wrap article">
+    <header>
+      <div class="eyebrow">Playbook</div>
+      <h1>Agent playbooks that your ops team can trust</h1>
+      <div class="byline">Published May 28, 2024 • 6 min read • <a href="../..">Back to all posts</a></div>
+    </header>
+
+    <img src="../../assets/aurora-2.svg" alt="Violet aurora gradient banner" class="hero" />
+
+    <p>Agents fail when they improvise outside their lanes. The remedy is to treat each automation like a change request: define scope, approvals, telemetry, and rollback long before the first tool call runs. This playbook shows how to codify that discipline.</p>
+
+    <h2>Design opinionated runbooks</h2>
+    <p>Start from a crisp charter: <em>who</em> owns the agent, <em>which systems</em> it can touch, and <em>what success</em> looks like. Encode that in a YAML manifest that lives beside the code so PRs must update policy.</p>
+
+    <pre><code>name: patch-tuesday-helper
+owner: sre@needtoknowtech.com
+systems:
+  - jamf
+  - crowdstrike
+  - jira
+approvals:
+  required: 1
+  roles:
+    - security
+logging:
+  destination: http+json://logging.internal:8088/agents
+  pii_filter: true
+rollback:
+  - type: script
+    path: scripts/revert.sh
+</code></pre>
+
+    <h2>Add a human-in-the-loop layer</h2>
+    <p>Ship a review screen that spells out the plan of record: which tasks will run, which accounts will be used, and what the post-conditions are. Agents that trigger outside working hours should default to <strong>pending</strong> until a reviewer clears them.</p>
+
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Approvals</strong>
+        <p>Require at least one approver for actions that touch production. For destructive changes, force multi-party sign-off.</p>
+      </div>
+      <div class="resource">
+        <strong>Observation</strong>
+        <p>Stream traces and token logs into an internal observer so you can replay decisions. Keep the data in your VPC.</p>
+      </div>
+      <div class="resource">
+        <strong>Tooling budget</strong>
+        <p>Limit number of tool calls and max duration per step to keep stuck agents from thrashing APIs.</p>
+      </div>
+    </div>
+
+    <h2>Package and promote safely</h2>
+    <p>Bundle the agent, its prompts, and the manifest into a versioned release. Promote between environments via the manifest so that logging, guardrails, and secrets remain consistent.</p>
+
+    <div class="callout">
+      <strong>Pro tip:</strong> Treat the manifest as the contract between product and operations. When a PR changes the contract, it signals a review for risk, observability, and rollback coverage.</div>
+
+    <div class="video-placeholder">Add a short approval-flow walkthrough or dashboard demo here.</div>
+
+    <h2>What to ship with every agent</h2>
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Runbook card</strong>
+        <p>Plain-language summary of scope, SLAs, and the audit trail location.</p>
+      </div>
+      <div class="resource">
+        <strong>Test suite</strong>
+        <p>Regression prompts, tool-call mocks, and abuse cases that run in CI before promotion.</p>
+      </div>
+      <div class="resource">
+        <strong>Rollback hooks</strong>
+        <p>Automation to undo or quarantine changes if the agent drifts or a reviewer rejects the run mid-flight.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
