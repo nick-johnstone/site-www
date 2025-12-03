@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeedToKnow Tech — Guides & Blog</title>
+  <meta name="description" content="Guides, playbooks, and updates from NeedToKnow Tech on private AI, agents, and on-prem workflows." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div class="branding">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div class="eyebrow" style="color:#94a3b8;font-size:.9rem">Guides & Updates</div>
+          <div class="title">NeedToKnow Tech</div>
+        </div>
+      </div>
+      <nav class="links" aria-label="Blog navigation">
+        <a href="/">Home</a>
+        <a href="#latest">Latest posts</a>
+        <a href="#archives">Archives</a>
+        <a href="#" class="pill" style="pointer-events:none">RSS coming soon</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="latest">
+      <h1>Guides for private AI, agents, and automation</h1>
+      <p>Structured playbooks and tutorials that show how to deploy, govern, and extend private AI across laptops, racks, and cloud-optional infrastructure. Each article ships with summaries, code snippets, and resource packs.</p>
+      <div class="meta">
+        <span>Sorted by newest first</span>
+        <span>Summaries inline, full content on click</span>
+        <span>Supports images, video placeholders, and code</span>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>Latest articles</h2>
+      <p class="hint">Click any card to open the full guide and download its resources.</p>
+    </div>
+    <div id="status" class="hint" role="status" aria-live="polite">Loading articles…</div>
+    <div id="posts" class="posts-grid" role="list"></div>
+    <div id="empty" class="empty" style="display:none">No posts yet. Add entries to <code>blog/posts.json</code> to publish.</div>
+
+    <div class="section-title" id="archives" style="margin-top:24px">
+      <h2>How this blog is organized</h2>
+    </div>
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Folder layout</strong>
+        <p>Each article lives in <code>/blog/posts/&lt;slug&gt;/index.html</code> with optional assets beside it. Metadata stays in <code>posts.json</code>.</p>
+      </div>
+      <div class="resource">
+        <strong>Rich media ready</strong>
+        <p>Image banners sit in <code>/blog/assets</code>, while videos can embed via <code>&lt;video&gt;</code> or external links. Code blocks are pre-styled.</p>
+      </div>
+      <div class="resource">
+        <strong>Summaries + full guides</strong>
+        <p>Cards use the <code>summary</code> field, and clicking jumps to the full article where you can include checklists, code, and downloads.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> NeedToKnow Tech. All rights reserved.
+  </footer>
+
+  <script>
+    const postsEl = document.getElementById('posts');
+    const emptyEl = document.getElementById('empty');
+    const statusEl = document.getElementById('status');
+
+    async function loadPosts() {
+      try {
+        const res = await fetch('posts.json');
+        const posts = await res.json();
+
+        const validPosts = Array.isArray(posts)
+          ? posts.filter((post) => post.title && post.slug && post.date)
+          : [];
+
+        if (validPosts.length === 0) {
+          statusEl.style.display = 'none';
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        statusEl.textContent = `Showing ${validPosts.length} article${validPosts.length === 1 ? '' : 's'} (newest first)`;
+
+        const fragment = document.createDocumentFragment();
+
+        validPosts
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .forEach((post) => {
+            const article = document.createElement('article');
+            article.className = 'card';
+            article.role = 'listitem';
+
+            const hero = document.createElement('div');
+            hero.className = 'thumb';
+            hero.style.backgroundImage = `url(${post.hero || 'assets/aurora-1.svg'})`;
+            hero.setAttribute('aria-hidden', 'true');
+
+            const body = document.createElement('div');
+            body.className = 'body';
+
+            const title = document.createElement('h3');
+            title.textContent = post.title;
+
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            const date = new Date(post.date).toLocaleDateString(undefined, {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            });
+            meta.textContent = `${date} • ${post.readingTime || '5 min read'}`;
+
+            const summary = document.createElement('p');
+            summary.className = 'summary';
+            summary.textContent = post.summary || '';
+
+            const tags = document.createElement('div');
+            tags.className = 'tags';
+            (post.tags || []).forEach((t) => {
+              const chip = document.createElement('span');
+              chip.className = 'tag';
+              chip.textContent = t;
+              tags.appendChild(chip);
+            });
+
+            const link = document.createElement('a');
+            link.href = `posts/${post.slug}/`;
+            link.setAttribute('aria-label', `Open ${post.title}`);
+            link.style.position = 'absolute';
+            link.style.inset = '0';
+            link.style.zIndex = '5';
+
+            body.append(title, meta, summary, tags);
+            article.append(hero, body, link);
+            fragment.appendChild(article);
+          });
+
+        postsEl.appendChild(fragment);
+      } catch (err) {
+        statusEl.style.display = 'none';
+        emptyEl.style.display = 'block';
+        console.error('Unable to load posts', err);
+      }
+    }
+
+    loadPosts();
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deploy private AI at the edge with confidence</title>
+  <meta name="description" content="A checklist-driven guide for running LLMs and vision models on-prem while keeping prompts, data, and telemetry private." />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+  <div class="wrap article">
+    <header>
+      <div class="eyebrow">Guide</div>
+      <h1>Deploy private AI at the edge with confidence</h1>
+      <div class="byline">Published Jun 11, 2024 • 7 min read • <a href="../..">Back to all posts</a></div>
+    </header>
+
+    <img src="../../assets/aurora-1.svg" alt="Cyan aurora gradient banner" class="hero" />
+
+    <p>Edge deployments live and die by predictability. This walkthrough outlines a repeatable process to ship language and vision models to laptops, micro-servers, or racks without leaking prompts, embeddings, or outputs to third-party services.</p>
+
+    <div class="callout">
+      <strong>What you get:</strong> A four-phase rollout plan, validated sizing heuristics, and a reference docker-compose that keeps inference on the LAN.
+    </div>
+
+    <h2>1) Pick the right workload and model family</h2>
+    <p>Start with a single workflow where latency matters but request volume is predictable. Examples include field notes summarization, part defect detection, or offline copilots for technicians. Choose a model with <em>quantized builds</em> and published VRAM footprints so you can plan for memory ceilings.</p>
+
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Model catalog</strong>
+        <p>Track candidates in a sheet with size, quantization options, license, and evaluation scores. Flag anything that requires outbound callbacks.</p>
+      </div>
+      <div class="resource">
+        <strong>Inference surfaces</strong>
+        <p>Prefer runners with streaming and GPU/CPU fallbacks (e.g., <code>llama.cpp</code>, <code>vLLM</code>, <code>llamafile</code>) so you can swap hardware without rewriting your app.</p>
+      </div>
+    </div>
+
+    <h2>2) Lock down the runtime</h2>
+    <p>Keep the serving stack small and observable. Disable telemetry flags, run behind an internal reverse proxy, and pin model artifacts with checksums. Use systemd or a supervisor that restarts on healthcheck failures instead of relying on cloud orchestration.</p>
+
+    <pre><code># minimal docker-compose.yml for a GPU host
+services:
+  inference:
+    image: ghcr.io/ggerganov/llama.cpp:full
+    command: ["--model", "/models/q4_k_m.gguf", "--port", "8080", "--host", "0.0.0.0"]
+    volumes:
+      - ./models:/models:ro
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 2
+</code></pre>
+
+    <h2>3) Build the safety rails first</h2>
+    <p>Log prompts and outputs to a local datastore with retention policies so you can audit misuse without phoning home. Add input size limits, redact sensitive strings, and set response-length ceilings to prevent runaway tokens.</p>
+
+    <div class="callout">
+      <strong>Tip:</strong> Pair every new prompt template with an automated regression that validates refusal behaviors, jailbreak resilience, and latency on the actual target hardware.
+    </div>
+
+    <h2>4) Roll out in concentric circles</h2>
+    <p>Start with a pilot group and expand in stages. Ship a "metrics dossier" per release that includes cold-start times, token/s benchmarks, and GPU utilization so stakeholders can compare performance between builds.</p>
+
+    <div class="video-placeholder">Embed a quick demo or operator training clip here (MP4/WebM or external link).</div>
+
+    <h2>Downloads & resources</h2>
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Edge readiness checklist</strong>
+        <p>Inventory form for hardware, network isolation, and fallback paths.</p>
+      </div>
+      <div class="resource">
+        <strong>Compose starter</strong>
+        <p>Drop the YAML above into <code>deploy/</code> with your selected GGUFs to bootstrap a LAN-only endpoint.</p>
+      </div>
+      <div class="resource">
+        <strong>Test harness</strong>
+        <p>Small Python harness to smoke-test prompts, refusal cases, and latency before every deployment wave.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

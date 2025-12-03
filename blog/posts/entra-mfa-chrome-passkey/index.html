@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Google Chrome Synced Passkey</title>
+  <meta name="description" content="Turn on Chrome synced passkeys for Microsoft Entra with guidance on profile security, hardware keys, and recovery." />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+  <div class="wrap article">
+    <header>
+      <div class="eyebrow">Guide</div>
+      <h1>Setup Google Chrome Synced Passkey</h1>
+      <div class="byline">Published Jul 19, 2024 • 6 min read • <a href="../..">Back to all posts</a></div>
+    </header>
+
+    <img src="../../assets/aurora-2.svg" alt="Violet aurora gradient banner" class="hero" />
+
+    <p>Chrome can store Entra passkeys in your Google profile so they follow you across desktops. Use this outline to capture tenant-specific prompts and emphasize the security measures that keep synced passkeys trustworthy.</p>
+
+    <h2>Prepare Chrome</h2>
+    <ol>
+      <li>Sign into Chrome with a managed Google account and confirm <strong>Sync</strong> is on for passwords and passkeys.</li>
+      <li>Open <strong>chrome://settings/passkeys</strong> and verify that <strong>Allow passkeys for signing in</strong> is enabled.</li>
+      <li>On macOS, ensure "Use passkeys from iCloud Keychain" is unchecked if you want Chrome to store the key in the Google profile.</li>
+    </ol>
+
+    <h2>Create the Entra passkey</h2>
+    <ol>
+      <li>From <strong>mysignins.microsoft.com &gt; Security info</strong>, pick <strong>Add sign-in method</strong> &gt; <strong>Passkey</strong>.</li>
+      <li>When the WebAuthn modal appears, select <strong>Use this device</strong> and choose <strong>Google Password Manager</strong> when prompted.</li>
+      <li>Approve with your computer login or platform authenticator; note any branding to capture in screenshots.</li>
+      <li>Confirm the passkey shows in <strong>chrome://settings/passkeys</strong> and test a fresh login to ensure Chrome offers it.</li>
+    </ol>
+
+    <div class="resource-grid">
+      <div class="resource">
+        <strong>Settings panels</strong>
+        <p>Drop screenshots of the Chrome settings pages that show passkey sync enabled and the Entra key listed.</p>
+      </div>
+      <div class="resource">
+        <strong>Security posture</strong>
+        <p>Call out whether the Google account has 2SV/hardware keys enforced and how that protects the synced passkey material.</p>
+      </div>
+      <div class="resource">
+        <strong>Offline behavior</strong>
+        <p>Note that local platform authenticators can still complete MFA if Chrome sync is paused or the network is offline.</p>
+      </div>
+    </div>
+
+    <h2>Recovery and removal</h2>
+    <ul>
+      <li>Document how to delete the passkey from Chrome settings and from the Entra <strong>Security info</strong> page.</li>
+      <li>Recommend keeping a hardware security key or TOTP as a break-glass factor if Chrome sync is unavailable.</li>
+      <li>Explain how enterprise-managed profiles can restrict passkey export and enforce reauthentication.</li>
+    </ul>
+
+    <div class="video-placeholder">Add a quick capture of the Chrome WebAuthn prompt and a successful sign-in using the passkey.</div>
+  </div>
+</body>
+</html>
