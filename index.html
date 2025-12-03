@@ -2,194 +2,441 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NeedToKnow Tech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeedToKnow Tech — AI Workflows, Agents & Private AI</title>
+  <meta name="description" content="AI workflows and agents designed for privacy-first, flexible, locally hosted solutions." />
   <style>
-    /* Basic Reset & Global Styling */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --panel:#0b1220;       /* deep panel */
+      --text:#e2e8f0;        /* slate-200 */
+      --muted:#94a3b8;       /* slate-400 */
+      --card:#111827;        /* gray-900 */
+      --accent:#06b6d4;      /* cyan-500 */
+      --accent-2:#22d3ee;    /* cyan-400 */
+      --ring:rgba(34,211,238,.45);
+      --shadow:0 10px 30px rgba(2,6,23,.55);
+      --radius:16px;
     }
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.5;
-      color: #333;
-      background-color: #f8f9fa;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% 0%, #0c1427 0%, var(--bg) 42%, #0b1222 100%);
+      color:var(--text);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:var(--accent)}
+
+    /* Header */
+    header.site{
+      position:sticky;top:0;z-index:50;
+      background:linear-gradient(180deg, rgba(2,6,23,.9), rgba(2,6,23,.6) 60%, rgba(2,6,23,0));
+      backdrop-filter:saturate(140%) blur(8px);
+      border-bottom:1px solid rgba(148,163,184,.12);
+    }
+    .wrap{max-width:1200px;margin-inline:auto;padding:16px 20px}
+    .brand{display:flex;align-items:center;gap:.8rem}
+    .brand .logo{width:28px;height:28px;border-radius:8px;background: conic-gradient(from 180deg at 50% 50%, var(--accent), var(--accent-2), #7dd3fc, var(--accent)); box-shadow:0 0 0 2px rgba(255,255,255,.05), 0 8px 20px rgba(34,211,238,.25)}
+    .brand h1{font-size:1.05rem;letter-spacing:.2px}
+    .tag{font-size:.85rem;color:var(--muted)}
+
+    /* Rolodex/Deck */
+    .rolodex{position:relative;display:grid;place-items:center;min-height:68vh;padding:28px 0 10px}
+    .deck{position:relative;width:min(1100px,94vw);height:62vh;perspective:1600px}
+    .card{position:absolute;inset:0;border-radius:var(--radius);overflow:hidden;background:#0b1220;box-shadow:var(--shadow);transition:transform 700ms cubic-bezier(.2,.8,.2,1), opacity 500ms ease, filter 500ms ease;transform-style:preserve-3d;display:grid;align-content:end}
+    .card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 120% at 10% 10%, rgba(2,6,23,.1), rgba(2,6,23,.6));}
+    .card .label{position:relative;z-index:2;padding:18px 20px;background:linear-gradient(180deg, rgba(2,6,23,0), rgba(2,6,23,.72));}
+    .card h2{font-size:1.35rem}
+    .card p{color:var(--muted);font-size:.95rem}
+    .card[data-bg]{background-size:cover;background-position:center}
+    .card .chip{display:inline-block;margin-bottom:8px;padding:4px 10px;border-radius:999px;background:rgba(8,145,178,.18);border:1px solid rgba(34,211,238,.35);font-size:.75rem;letter-spacing:.2px}
+
+    .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(2,6,23,.7);border:1px solid rgba(148,163,184,.2);padding:10px 14px;border-radius:12px;cursor:pointer;font-size:1.5rem;line-height:1;box-shadow:var(--shadow)}
+    .nav:hover{outline:3px solid var(--ring)}
+    .nav.prev{left:10px}
+    .nav.next{right:10px}
+
+    /* Positions relative to active index (handled by JS) */
+    .pos0{transform:translateZ(140px) scale(1)}
+    .pos-1{transform:translateX(-230px) rotateY(-28deg) translateZ(0) scale(.86);filter:grayscale(.12) brightness(.95)}
+    .pos1{transform:translateX(230px) rotateY(28deg) translateZ(0) scale(.86);filter:grayscale(.12) brightness(.95)}
+    .pos-2{transform:translateX(-430px) rotateY(-36deg) translateZ(-120px) scale(.78);opacity:.9;filter:grayscale(.25) brightness(.9)}
+    .pos2{transform:translateX(430px) rotateY(36deg) translateZ(-120px) scale(.78);opacity:.9;filter:grayscale(.25) brightness(.9)}
+    .hiddenL{transform:translateX(-800px) rotateY(-50deg) translateZ(-260px) scale(.6);opacity:0;pointer-events:none}
+    .hiddenR{transform:translateX(800px) rotateY(50deg) translateZ(-260px) scale(.6);opacity:0;pointer-events:none}
+
+    @media (max-width: 900px){
+      .deck{height:58vh}
+      .pos-1,.pos1{transform:translateX(160px) rotateY(22deg) scale(.86)}
+      .pos-1{transform:translateX(-160px) rotateY(-22deg) scale(.86)}
+      .pos-2,.pos2{display:none}
+    }
+    @media (max-width: 640px){
+      .deck{height:56vh}
+      .nav{display:none}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .card, .nav{transition:none}
     }
 
-    /* Hero Section */
-    .hero {
-      background: url("images/main.jpg") no-repeat center center/cover;
-      height: 60vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: #ffffff;
-      position: relative;
+    /* Use-cases grid */
+    section.usecases{padding:40px 20px}
+    .usecases .wrap{max-width:1100px}
+    .usecases h2{font-size:1.6rem;margin-bottom:12px}
+    .usecases p.lead{color:var(--muted);margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+    .tile{background:linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.9));border:1px solid rgba(148,163,184,.15);border-radius:14px;padding:14px;min-height:128px}
+    .tile h3{font-size:1rem;margin-bottom:6px}
+    .tile p{font-size:.9rem;color:var(--muted)}
+    @media (max-width: 1024px){.grid{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width: 640px){.grid{grid-template-columns:1fr}}
+
+    /* Rotating facts — upgraded */
+    section.facts{padding:42px 20px}
+    .facts .panel{
+      position:relative;overflow:hidden;border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.9));
+      border:1px solid rgba(148,163,184,.2);
+      box-shadow: 0 10px 30px rgba(2,6,23,.35), inset 0 0 40px rgba(34,211,238,.06);
     }
-    .hero-overlay {
-      background: rgba(0, 0, 0, 0.5);
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
+    .facts .panel::after{
+      /* subtle moving glow behind text */
+      content:"";position:absolute;inset:-2px;pointer-events:none;
+      background:
+        radial-gradient(600px 120px at var(--beam-x,12%) 20%, rgba(34,211,238,.12), transparent 60%),
+        radial-gradient(600px 120px at calc(100% - var(--beam-x,12%)) 80%, rgba(56,189,248,.09), transparent 60%);
+      transition: .6s;
     }
-    .hero-content {
-      position: relative;
-      z-index: 1;
+    .facts h2{font-size:1.7rem;margin-bottom:12px}
+    .facts p.lead{color:var(--muted);margin-bottom:14px}
+    .fact-viewport{position:relative;min-height:140px}
+
+    .fact{
+      position:absolute;inset:0;display:flex;align-items:center;
+      padding:22px 22px;font-size:1.25rem;line-height:1.5;letter-spacing:.2px;
+      opacity:0;transform:translateY(14px) rotateX(-10deg) scale(.98);
+      filter:blur(6px);
+      transition:opacity 480ms ease, transform 520ms cubic-bezier(.2,.8,.2,1), filter 520ms ease;
+      z-index:0;
     }
-    .hero-content h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-    .hero-content p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto;
+    .fact.active{
+      opacity:1;transform:translateY(0) rotateX(0) scale(1);filter:blur(0);
+      z-index:2;
     }
 
-    /* Services Section */
-    .services {
-      background: #ffffff;
-      padding: 40px 20px;
-      text-align: center;
+    /* vivid in/out keyframes applied via JS classes for smoother sequencing */
+    @keyframes factIn{
+      0%{opacity:0;transform:translateY(16px) rotateX(-18deg) scale(.96);filter:blur(8px)}
+      100%{opacity:1;transform:translateY(0) rotateX(0) scale(1);filter:blur(0)}
     }
-    .services h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: #003366; /* Dark blue tone */
+    @keyframes factOut{
+      0%{opacity:1;transform:translateY(0) rotateX(0) scale(1);filter:blur(0)}
+      100%{opacity:0;transform:translateY(-16px) rotateX(18deg) scale(.98);filter:blur(8px)}
     }
-    .services p {
-      font-size: 1rem;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      color: #555555;
+    .fact.animate-in{animation: factIn 520ms cubic-bezier(.2,.8,.2,1) both; z-index:2;}
+    .fact.animate-out{animation: factOut 480ms cubic-bezier(.2,.8,.2,1) both; z-index:1;}
+
+.facts strong{
+  font-weight:800;
+  background-image:linear-gradient(90deg, var(--f1, var(--accent)), var(--f2, var(--accent-2)));
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent; 
+  -webkit-text-fill-color: transparent; /* improves Safari behavior */
+  text-decoration:none;
+
+  /* NEW: ensure visible spacing around highlighted words */
+  margin-inline: .2em;
+}
+
+    .dots{display:flex;gap:6px;justify-content:center;padding:10px}
+    .dot{
+      width:9px;height:9px;border-radius:10px;background:rgba(148,163,184,.35);
+      border:1px solid rgba(148,163,184,.3);
+      transform:scale(1);transition:transform .2s ease, background .2s ease, border-color .2s ease;
     }
-    .service-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .service-list li {
-      list-style: none;
-      background-color: #f0f4f8;
-      border: 1px solid #d9e0e7;
-      border-radius: 8px;
-      padding: 20px;
-      min-width: 200px;
-      flex: 1 1 200px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    .dot.active{
+      background:var(--accent);transform:scale(1.25);border-color:rgba(34,211,238,.6)
     }
 
-    /* Contact Section */
-    .contact {
-      background: url("images/contact.jpg") no-repeat center center/cover;
-      color: #ffffff;
-      padding: 40px 20px;
-      text-align: center;
-      position: relative;
+    /* responsive type sizes */
+    @media (max-width: 900px){
+      .fact{font-size:1.15rem;padding:20px}
     }
-    .contact-overlay {
-      background: rgba(0, 0, 0, 0.5);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .contact-content {
-      position: relative;
-      z-index: 1;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .contact h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-    .contact p {
-      margin-bottom: 1rem;
-    }
-    .contact a {
-      color: #ffdd57; /* A contrasting highlight color */
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .contact a:hover {
-      text-decoration: underline;
+    @media (max-width: 640px){
+      .fact-viewport{min-height:120px}
+      .fact{font-size:1.05rem;padding:18px}
     }
 
-    /* Footer */
-    .footer {
-      background-color: #e2e3e5;
-      text-align: center;
-      padding: 10px 20px;
-      color: #555;
-      font-size: 0.9rem;
+    /* Respect reduced-motion */
+    @media (prefers-reduced-motion: reduce){
+      .fact, .fact.animate-in, .fact.animate-out{transition:none;animation:none;filter:none;transform:none}
     }
 
-    /* Responsive Media Queries */
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2.2rem;
-      }
-      .service-list {
-        flex-direction: column;
-      }
-    }
+    /* Contact */
+    .contact{padding:38px 20px}
+    .contact .panel{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;background:linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.9));border:1px solid rgba(148,163,184,.15);border-radius:var(--radius);padding:20px}
+
+    footer{color:#94a3b8;border-top:1px solid rgba(148,163,184,.15);padding:16px 20px;text-align:center}
   </style>
 </head>
 <body>
-
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1>NeedToKnow Tech</h1>
-      <p>Project planning and delivery in Cyber Security, Identity, Automation, and AI spaces.<br>
-        Focused on Microsoft, CyberArk, and SailPoint.</p>
+  <header class="site">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div class="brand" aria-label="NeedToKnow Tech">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>NeedToKnow Tech</h1>
+          <div class="tag">AI Workflows • Agents • Private AI</div>
+        </div>
+      </div>
+      <nav aria-label="Site">
+        <a href="#usecases" style="margin-right:14px;text-decoration:none">Use cases</a>
+        <a href="#why" style="text-decoration:none">Why Private AI</a>
+      </nav>
     </div>
   </header>
 
-  <!-- Services Section -->
-  <section class="services">
-    <h2>Our Services</h2>
-    <p>We provide expert guidance and hands-on support to ensure your business succeeds in the following areas:</p>
-    <ul class="service-list">
-      <li>Cyber Security</li>
-      <li>Identity & Access Management</li>
-      <li>Automation</li>
-      <li>AI Integration</li>
-      <li>Microsoft Solutions</li>
-      <li>CyberArk Solutions</li>
-      <li>SailPoint Solutions</li>
-    </ul>
+  <!-- Rolodex / Coverflow Deck -->
+  <section class="rolodex" aria-label="Showcase">
+    <div class="deck" id="deck">
+      <!-- Each card can be swapped to a local image by changing the background-image URL -->
+      <article class="card pos0" data-bg style="background-image:url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Private AI</span>
+          <h2>Run Models Locally</h2>
+          <p>Own your data. Keep prompts and outputs inside your network.</p>
+        </div>
+      </article>
+      <article class="card pos1" data-bg style="background-image:url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Workflows</span>
+          <h2>Chain Tools into Outcomes</h2>
+          <p>Orchestrate multi step tasks across your stack with guardrails.</p>
+        </div>
+      </article>
+      <article class="card pos2 hiddenR" data-bg style="background-image:url('https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Agents</span>
+          <h2>Goal Driven Automation</h2>
+          <p>Agents plan, call APIs & adapt with feedback to hit objectives.</p>
+        </div>
+      </article>
+      <article class="card hiddenR" data-bg style="background-image:url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Security</span>
+          <h2>Privacy by Design</h2>
+          <p>Minimise exposure; align with data residency & compliance.</p>
+        </div>
+      </article>
+      <article class="card hiddenR" data-bg style="background-image:url('https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Identity</span>
+          <h2>IAM Aware Automation</h2>
+          <p>Joiner/Mover/Leaver flows with approvals & least privilege.</p>
+        </div>
+      </article>
+      <article class="card hiddenR" data-bg style="background-image:url('https://images.unsplash.com/photo-1534759846116-5791c869365c?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Ops</span>
+          <h2>Observability Built in</h2>
+          <p>Trace every step with metrics, logs and human in the loop.</p>
+        </div>
+      </article>
+      <article class="card hiddenR" data-bg style="background-image:url('https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Flexibility</span>
+          <h2>Right Model for the Job</h2>
+          <p>Swap models per task; mix proprietary & open source locally.</p>
+        </div>
+      </article>
+      <article class="card hiddenR" data-bg style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72?q=80&w=1600&auto=format&fit=crop');">
+        <div class="label">
+          <span class="chip">Latency</span>
+          <h2>Fast, Predictable Response</h2>
+          <p>Local inference reduces hops and removes token surprises.</p>
+        </div>
+      </article>
+    </div>
+    <button class="nav prev" id="prev" aria-label="Previous">&#8249;</button>
+    <button class="nav next" id="next" aria-label="Next">&#8250;</button>
   </section>
 
-  <!-- Contact Section -->
-  <section class="contact">
-    <div class="contact-overlay"></div>
-    <div class="contact-content">
-      <h2>Get in Touch</h2>
-      <p>Have questions or need more info about our services?</p>
-      <p>Email us at 
-        <a href="mailto:nick@needtoknowtech.com.au">nick@needtoknowtech.com.au</a>
-      </p>
+  <!-- Use Cases -->
+  <section class="usecases" id="usecases">
+    <div class="wrap">
+      <h2>Top AI Workflow & Agent Use Cases</h2>
+      <p class="lead">Common, high impact patterns we implement first.</p>
+      <div class="grid">
+        <div class="tile"><h3>1) Ticket triage & routing </h3><p> Turn emails/Slack into tickets, auto classify, reply, and route with context.</p></div>
+        <div class="tile"><h3>2) Knowledge base Q&A </h3><p> Ask questions over docs, wikis & tickets with citations and access controls.</p></div>
+        <div class="tile"><h3>3) Document intake </h3><p> OCR → classify → extract fields → push to CRM/ERP with validation.</p></div>
+        <div class="tile"><h3>4) Meeting follow ups </h3><p> Summaries, decisions & action items with auto tasks and nudges.</p></div>
+        <div class="tile"><h3>5) Sales assist </h3><p> Draft proposals, update CRM, suggest next best actions from activity.</p></div>
+        <div class="tile"><h3>6) Marketing ops </h3><p> Generate/review content, A/B variants, schedule with approvals.</p></div>
+        <div class="tile"><h3>7) DevOps copilot </h3><p> Summarise logs, create issues, roll back or runbooks with guardrails.</p></div>
+        <div class="tile"><h3>8) RPA hand offs </h3><p> Agents drive browsers, fill forms, reconcile systems when APIs fall short.</p></div>
+        <div class="tile"><h3>9) SecOps enrichment </h3><p> Triage alerts, enrich IOCs, propose responses; keep humans in control.</p></div>
+        <div class="tile"><h3>10) IAM workflows </h3><p> Joiner/Mover/Leaver automation with approvals and least privilege.</p></div>
+      </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
+  <!-- Rotating facts: What & Why -->
+  <section class="facts" id="why" aria-live="polite">
+    <div class="wrap">
+      <h2>What & Why: AI Workflows, Agents & Local Hosting</h2>
+      <p class="lead">Short, factual points rotate below. These also work well as social proof banners.</p>
+      <div class="panel">
+        <div class="fact-viewport" id="facts">
+          <div class="fact active">AI<strong> workflows </strong>orchestrate multiple steps (ingest → reason → act) reliably across tools and data sources.</div>
+          <div class="fact">An<strong> agent </strong>is a system that plans, calls tools/APIs, observes results, and iterates until the goal is reached.</div>
+          <div class="fact"><strong> Local hosting </strong>keeps prompts, context and outputs on your infrastructure, reducing third party data exposure.</div>
+          <div class="fact">Local models provide<strong> predictable cost </strong>(hardware bounded) instead of variable per token fees.</div>
+          <div class="fact">Running inference close to data lowers<strong> latency </strong>and avoids external rate limits or outages.</div>
+          <div class="fact">Open source models can be<strong> customised </strong>(fine tuned, adapters) to your domain and compliance needs.</div>
+          <div class="fact">Workflows add<strong> guardrails </strong>, approvals, policy checks, and audit logs around every automated action.</div>
+          <div class="fact">Agents integrate with<strong> existing systems </strong>(IDAM, ticketing, CRM, RPA) to reduce swivel chair work.</div>
+          <div class="fact">Private AI improves<strong> compliance </strong>with data residency (e.g., AU/EU), retention and classification policies.</div>
+          <div class="fact">Observability, capture<strong> traces & metrics </strong>so humans can review, override, and continuously improve.</div>
+        </div>
+        <div class="dots" id="factDots" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / CTA -->
+  <section class="contact">
+    <div class="wrap">
+      <div class="panel">
+        <div>
+          <h3>Lets design your private AI stack</h3>
+          <p class="tag">Microsoft • CyberArk • SailPoint • Open source models • Orchestration</p>
+        </div>
+        <div>
+          <a href="mailto:nick@needtoknowtech.com.au" style="display:inline-block;padding:10px 16px;border-radius:10px;border:1px solid rgba(34,211,238,.45);text-decoration:none">nick@needtoknowtech.com.au</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
     &copy; <span id="year"></span> NeedToKnow Tech. All rights reserved.
   </footer>
 
   <script>
-    // Auto-update footer year
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ----- Rolodex logic -----
+    const deck = document.getElementById('deck');
+    const cards = Array.from(deck.querySelectorAll('.card'));
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    let i = 0;
+
+    function layout(){
+      const n = cards.length;
+      cards.forEach((c, idx)=>{
+        const raw = (idx - i + n) % n; // 0..n-1 relative to active
+        let pos = raw; if(pos > n/2) pos = pos - n; // negative for left side
+        c.classList.remove('pos0','pos-1','pos1','pos-2','pos2','hiddenL','hiddenR');
+        if(pos === 0) c.classList.add('pos0');
+        else if(pos === -1) c.classList.add('pos-1');
+        else if(pos === 1) c.classList.add('pos1');
+        else if(pos === -2) c.classList.add('pos-2');
+        else if(pos === 2) c.classList.add('pos2');
+        else if(pos < -2) c.classList.add('hiddenL');
+        else c.classList.add('hiddenR');
+      });
+    }
+    function go(delta){ i = (i + delta + cards.length) % cards.length; layout(); }
+    prev.addEventListener('click', ()=>go(-1));
+    next.addEventListener('click', ()=>go(1));
+    layout();
+
+    // Auto-rotate (pause on hover)
+    let auto = setInterval(()=>go(1), 5000);
+    deck.addEventListener('mouseenter', ()=>clearInterval(auto));
+    deck.addEventListener('mouseleave', ()=>auto = setInterval(()=>go(1), 5000));
+
+    // Keyboard support
+    window.addEventListener('keydown', (e)=>{ if(e.key==='ArrowLeft') go(-1); if(e.key==='ArrowRight') go(1); });
+
+    // ----- Facts rotator (upgraded) -----
+    const viewport = document.getElementById('facts');
+    const panel = document.querySelector('.facts .panel');
+    const facts = Array.from(document.querySelectorAll('#facts .fact'));
+    const dotsC = document.getElementById('factDots');
+
+    // palette used to tint <strong> gradient each step
+    const palette = [
+      ['#22d3ee','#06b6d4'], // cyan
+      ['#a78bfa','#8b5cf6'], // violet
+      ['#f59e0b','#f97316'], // amber
+      ['#34d399','#10b981'], // emerald
+      ['#f472b6','#ec4899'], // pink
+      ['#60a5fa','#3b82f6'], // blue
+      ['#f43f5e','#ef4444'], // rose
+      ['#84cc16','#22c55e'], // lime/green
+      ['#fde047','#f59e0b'], // yellow/amber
+      ['#7dd3fc','#38bdf8']  // sky
+    ];
+
+    // build dots
+    facts.forEach((_, idx)=>{
+      const b = document.createElement('div');
+      b.className = 'dot' + (idx===0?' active':'');
+      b.addEventListener('click', ()=> show(idx));
+      dotsC.appendChild(b);
+    });
+    const dots = Array.from(dotsC.children);
+
+    // set initial gradient tint
+    (function initTint(){
+      const [c1, c2] = palette[0];
+      viewport.style.setProperty('--f1', c1);
+      viewport.style.setProperty('--f2', c2);
+    })();
+
+    let f = 0;
+    function show(nextIdx){
+      if(nextIdx === f) return;
+
+      const current = facts[f];
+      const nextFact = facts[nextIdx];
+
+      // animate out current, then drop its 'active'
+      current.classList.add('animate-out');
+      current.addEventListener('animationend', function handler(){
+        current.classList.remove('animate-out','active');
+        current.removeEventListener('animationend', handler);
+      });
+
+      // animate in next
+      nextFact.classList.add('active','animate-in');
+      nextFact.addEventListener('animationend', function handler2(){
+        nextFact.classList.remove('animate-in');
+        nextFact.removeEventListener('animationend', handler2);
+      });
+
+      // update dots
+      dots[f].classList.remove('active');
+      dots[nextIdx].classList.add('active');
+
+      // update gradient tint + background beam position
+      const [c1, c2] = palette[nextIdx % palette.length];
+      viewport.style.setProperty('--f1', c1);
+      viewport.style.setProperty('--f2', c2);
+      panel.style.setProperty('--beam-x', Math.floor(Math.random()*80 + 10) + '%');
+
+      f = nextIdx;
+    }
+
+    // auto-advance
+    setInterval(()=>{ show( (f+1) % facts.length ); }, 4200);
   </script>
 </body>
 </html>
