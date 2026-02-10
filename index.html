@@ -179,6 +179,36 @@
       .fact, .fact.animate-in, .fact.animate-out{transition:none;animation:none;filter:none;transform:none}
     }
 
+    /* Risk / Reward */
+    .risk-reward{padding:44px 20px}
+    .risk-reward .section-head{margin-bottom:18px}
+    .risk-reward h2{font-size:1.6rem;margin-bottom:10px}
+    .risk-reward .lead{color:var(--muted);max-width:920px}
+    .rr-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:16px}
+    .rr-card{
+      background:linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.9));
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:14px;
+      padding:16px;
+    }
+    .rr-card h3{font-size:1.05rem;margin-bottom:10px}
+    .rr-card ul{padding-left:18px;display:grid;gap:8px}
+    .rr-card li{color:#cbd5e1}
+    .rr-card strong{color:#e2e8f0}
+    .rr-card.pros{border-color:rgba(34,211,238,.35);box-shadow:0 6px 20px rgba(34,211,238,.09)}
+    .rr-card.cons{border-color:rgba(251,113,133,.34);box-shadow:0 6px 20px rgba(251,113,133,.08)}
+    .rr-footer{
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:14px;
+      padding:16px;
+      background:linear-gradient(180deg, rgba(2,6,23,.45), rgba(2,6,23,.78));
+    }
+    .rr-footer h3{font-size:1rem;margin-bottom:8px}
+    .rr-footer p{color:var(--muted)}
+    @media (max-width: 860px){
+      .rr-grid{grid-template-columns:1fr}
+    }
+
     /* Contact */
     .contact{padding:38px 20px}
     .contact .panel{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;background:linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.9));border:1px solid rgba(148,163,184,.15);border-radius:var(--radius);padding:20px}
@@ -199,6 +229,7 @@
       <nav aria-label="Site" class="nav-links">
         <a href="#usecases">Use cases</a>
         <a href="#why">Why Private AI</a>
+        <a href="#ai-balance">Risk vs Reward</a>
         <a href="/blog/" class="pill">Guides &amp; blog</a>
       </nav>
     </div>
@@ -308,6 +339,42 @@
           <div class="fact">Observability, capture<strong> traces & metrics </strong>so humans can review, override, and continuously improve.</div>
         </div>
         <div class="dots" id="factDots" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Risk / Reward section -->
+  <section class="risk-reward" id="ai-balance" aria-label="Local AI and autonomous agent risk and reward">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Local AI &amp; Autonomous Agents: High Leverage, Higher Responsibility</h2>
+        <p class="lead">Platforms like OpenClaw can unlock huge productivity gains, but only when paired with strong guardrails, clear ownership, and disciplined rollout.</p>
+      </div>
+      <div class="rr-grid">
+        <article class="rr-card pros" aria-labelledby="benefits-title">
+          <h3 id="benefits-title">Benefits When Done Right</h3>
+          <ul>
+            <li><strong>Data sovereignty:</strong> Keep sensitive prompts, context, and outputs on your infrastructure.</li>
+            <li><strong>Lower operating costs:</strong> Hardware-bounded local inference avoids unpredictable token spend.</li>
+            <li><strong>Faster response times:</strong> Local execution reduces round-trips and external service dependencies.</li>
+            <li><strong>Domain-specific performance:</strong> Tune and orchestrate models around your real workflows and policies.</li>
+            <li><strong>Compounding automation:</strong> Agents handle repetitive work while teams focus on higher-value outcomes.</li>
+          </ul>
+        </article>
+        <article class="rr-card cons" aria-labelledby="risks-title">
+          <h3 id="risks-title">Risks When Done Wrong</h3>
+          <ul>
+            <li><strong>Over-privileged agents:</strong> Excessive tool/API access can create security and operational blast radius.</li>
+            <li><strong>Silent failure modes:</strong> Weak observability hides hallucinations, bad actions, or policy drift.</li>
+            <li><strong>Compliance exposure:</strong> Missing retention, residency, and audit controls can violate requirements.</li>
+            <li><strong>Automation without approvals:</strong> No human checkpoints increases business and reputational risk.</li>
+            <li><strong>Unclear accountability:</strong> Without owners and runbooks, incident response becomes slow and fragile.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="rr-footer">
+        <h3>Recommended Operating Model</h3>
+        <p>Start with low-risk internal workflows, enforce least privilege, instrument everything, and add human approval for high-impact steps. Expand autonomy only after reliability and governance KPIs are consistently met.</p>
       </div>
     </div>
   </section>
